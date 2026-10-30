@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+  <meta name="theme-color" content="#080d18" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="description" content="Clockwork Capers — a wind-up puzzle playground with a touch level editor, new pieces, and tilt controls." />
+  <title>Clockwork Capers</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='26' fill='%23d8a33c'/%3E%3Ccircle cx='32' cy='32' r='10' fill='%23080d18'/%3E%3C/svg%3E" />
+</head>
+<body>
+  <div id="app">
+    <!-- HOME -->
+    <section id="screen-home" class="screen active">
+      <div class="home-glow" aria-hidden="true"></div>
+      <div class="home-inner">
+        <div class="brand">
+          <div class="logo-mark" aria-hidden="true">
+            <svg viewBox="0 0 120 120" role="img">
+              <defs>
+                <linearGradient id="brass" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#f6d78a"/>
+                  <stop offset="0.45" stop-color="#d8a33c"/>
+                  <stop offset="1" stop-color="#8a5a1e"/>
+                </linearGradient>
+                <radialGradient id="glow" cx="50%" cy="45%" r="55%">
+                  <stop offset="0" stop-color="#38d9f5" stop-opacity="0.5"/>
+                  <stop offset="1" stop-color="#38d9f5" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <circle cx="60" cy="60" r="54" fill="url(#glow)"/>
+              <g fill="url(#brass)" stroke="#5c3a10" stroke-width="3">
+                <path d="M60 10l7 12 14-3 3 14 13 6-6 13 9 11-11 9 3 14-14 3-6 13-13-6-11 9-9-11-14 3-3-14-13-6 6-13-9-11 11-9-3-14 14-3 6-13 13 6z"/>
+              </g>
+              <circle cx="60" cy="60" r="22" fill="#0b1526" stroke="#5c3a10" stroke-width="3"/>
+              <circle cx="60" cy="60" r="10" fill="url(#brass)"/>
+              <g stroke="#f6d78a" stroke-width="3" stroke-linecap="round">
+                <path d="M60 60V42"/>
+                <path d="M60 60l13 8"/>
+              </g>
+              <circle cx="60" cy="60" r="4" fill="#0b1526"/>
+            </svg>
+          </div>
+          <h1 data-i18n="appName">Clockwork Capers</h1>
+          <p class="tagline" data-i18n="tagline">A wind-up puzzle playground</p>
+          <p class="subtagline" data-i18n="subTagline">Build the path. Wind them up. Bring every toy home.</p>
+        </div>
+
+        <div class="home-actions">
+          <button id="btn-play" class="btn primary xl">
+            <span class="btn-icon" aria-hidden="true">▶</span>
+            <span data-i18n="play">Play</span>
+          </button>
+          <div class="home-row">
+            <button id="btn-levels" class="btn ghost">
+              <span class="btn-icon" aria-hidden="true">☰</span>
+              <span data-i18n="levels">Levels</span>
+            </button>
+            <button id="btn-create" class="btn ghost">
+              <span class="btn-icon" aria-hidden="true">✦</span>
+              <span data-i18n="create">Create</span>
+            </button>
+          </div>
+          <button id="btn-how" class="btn text">
+            <span class="btn-icon" aria-hidden="true">?</span>
+            <span data-i18n="howTo">How to play</span>
+          </button>
+        </div>
+
+        <div class="home-foot">
+          <button id="btn-lang" class="chip" data-i18n="language">العربية</button>
+          <button id="btn-sound" class="chip" aria-pressed="true">
+            <span class="chip-dot"></span><span data-i18n="sound">Sound</span>
+          </button>
+          <button id="btn-tilt" class="chip" aria-pressed="false">
+            <span class="chip-dot"></span><span data-i18n="tilt">Tilt</span>
+          </button>
+        </div>
+        <div class="home-stars">
+          <span class="star-glyph">★</span>
+          <span id="home-star-count">0</span>
+          <span class="home-stars-label" data-i18n="stars">Stars</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEVEL SELECT -->
+    <section id="screen-levels" class="screen">
+      <header class="topbar">
+        <button id="levels-back" class="icon-btn" data-i18n-aria="back" aria-label="Back">←</button>
+        <h2 data-i18n="levelsTitle">Choose a level</h2>
+        <button id="levels-new" class="icon-btn" data-i18n-aria="newLevel" aria-label="New level">+</button>
+      </header>
+      <div class="levels-scroll">
+        <div class="section-head">
+          <h3 data-i18n="campaign">Campaign</h3>
+          <span id="campaign-progress" class="section-meta"></span>
+        </div>
+        <div id="campaign-grid" class="level-grid"></div>
+        <div class="section-head">
+          <h3 data-i18n="myLevels">My creations</h3>
+          <button id="btn-import" class="mini-btn" data-i18n="importCode">Import</button>
+        </div>
+        <div id="custom-grid" class="level-grid"></div>
+        <div class="levels-foot">
+          <button id="btn-random" class="btn ghost" data-i18n="randomLevel">Random workshop</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- GAME -->
+    <section id="screen-game" class="screen">
+      <header class="hud">
+        <button id="game-back" class="icon-btn" data-i18n-aria="back" aria-label="Back">←</button>
+        <div class="hud-title">
+          <span id="level-tag" class="level-tag"></span>
+          <h2 id="level-name"></h2>
+        </div>
+        <div class="hud-stats">
+          <div class="stat" title="Toys">
+            <span class="stat-icon toy-icon" aria-hidden="true"></span>
+            <span id="stat-minis">0/0</span>
+          </div>
+          <div class="stat" title="Coins">
+            <span class="stat-icon coin-icon" aria-hidden="true"></span>
+            <span id="stat-coins">0/0</span>
+          </div>
+          <div class="stat budget-stat" title="Budget">
+            <span class="stat-icon gear-icon" aria-hidden="true"></span>
+            <span id="stat-budget">0</span>
+          </div>
+        </div>
+        <div class="hud-actions">
+          <button id="btn-undo" class="icon-btn small" data-i18n-aria="undo" aria-label="Undo">↶</button>
+          <button id="btn-redo" class="icon-btn small" data-i18n-aria="redo" aria-label="Redo">↷</button>
+          <button id="btn-preview" class="icon-btn small toggle" data-i18n-aria="preview" aria-label="Path preview">⌁</button>
+          <button id="btn-settings" class="icon-btn small" data-i18n-aria="settings" aria-label="Settings">⚙</button>
+        </div>
+      </header>
+
+      <div id="stage" class="stage">
+        <canvas id="game-canvas" aria-label="Clockwork Capers game board"></canvas>
+        <div id="stage-banner" class="stage-banner hidden"></div>
+        <div id="run-badge" class="run-badge hidden"><span class="run-dot"></span><span data-i18n="runHint">Watch the clockwork go…</span></div>
+      </div>
+
+      <footer class="tray">
+        <div class="tray-head">
+          <div class="tray-mode" id="tray-mode">
+            <span class="mode-pill" id="mode-pill" data-i18n="build">Build</span>
+            <span class="budget-pill"><span class="gear-mini"></span><span id="budget-left">0</span> <span data-i18n="left">left</span></span>
+          </div>
+          <div class="tray-actions">
+            <button id="btn-run" class="btn primary compact">
+              <span class="btn-icon" aria-hidden="true">▶</span><span data-i18n="run">Run</span>
+            </button>
+            <button id="btn-stop" class="btn compact hidden">
+              <span class="btn-icon" aria-hidden="true">■</span><span data-i18n="stop">Stop</span>
+            </button>
+            <button id="btn-restart" class="btn compact hidden">
+              <span class="btn-icon" aria-hidden="true">↺</span><span data-i18n="restart">Restart</span>
+            </button>
+            <button id="btn-speed" class="btn compact hidden" data-i18n-aria="speed" aria-label="Speed">1×</button>
+          </div>
+        </div>
+
+        <div id="palette" class="palette" role="toolbar" aria-label="Pieces"></div>
+
+        <div id="toolbar" class="toolbar">
+          <button class="tool" data-tool="erase"><span class="tool-glyph">⌫</span><span data-i18n="erase">Erase</span></button>
+          <button class="tool" data-tool="spawn"><span class="tool-glyph">◉</span><span data-i18n="spawn">Start</span></button>
+          <button class="tool" data-tool="goal"><span class="tool-glyph">★</span><span data-i18n="goal">Goal</span></button>
+          <button class="tool" data-tool="clear"><span class="tool-glyph">✧</span><span data-i18n="clear">Clear</span></button>
+          <button class="tool" data-tool="hint"><span class="tool-glyph">?</span><span data-i18n="hint">Hint</span></button>
+          <button class="tool" data-tool="save"><span class="tool-glyph">⤓</span><span data-i18n="saveLevel">Save</span></button>
+          <button class="tool" data-tool="share"><span class="tool-glyph">↗</span><span data-i18n="share">Share</span></button>
+        </div>
+      </footer>
+    </section>
+
+    <div id="modal-root" class="modal-root hidden" role="dialog" aria-modal="true"></div>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
